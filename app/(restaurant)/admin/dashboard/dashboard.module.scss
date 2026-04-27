@@ -1,0 +1,403 @@
+.loadingScreen {
+    min-height: 100vh;
+    background: #080808;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: rgba(255,255,255,0.4);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.loadingDot {
+    width: 8px;
+    height: 8px;
+    background: #E63946;
+    border-radius: 50%;
+    animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+}
+
+.page {
+    min-height: 100vh;
+    background: #080808;
+    font-family: 'DM Mono', 'Courier New', monospace;
+    display: flex;
+    flex-direction: column;
+}
+
+// Header
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.headerLogo {
+    font-size: 1.5rem;
+    color: #E63946;
+    filter: drop-shadow(0 0 8px rgba(230,57,70,0.5));
+}
+
+.headerTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.05em;
+}
+
+.headerSub {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    margin: 0;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.orderCount {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(230,57,70,0.1);
+    border: 1px solid rgba(230,57,70,0.3);
+    border-radius: 8px;
+    padding: 0.25rem 0.75rem;
+}
+
+.orderCountNum {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #E63946;
+    line-height: 1;
+}
+
+.orderCountLabel {
+    font-size: 0.55rem;
+    color: rgba(230,57,70,0.7);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.menuBtn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.75rem;
+    font-family: inherit;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+    }
+}
+
+.logoutBtn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    font-family: inherit;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        border-color: #E63946;
+        color: #E63946;
+    }
+}
+
+// Kanban
+.kanban {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+
+    @media (max-width: 1100px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.column {
+    background: #0d0d0d;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 65px);
+}
+
+.columnHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 2px solid var(--col-color);
+    position: sticky;
+    top: 65px;
+    background: #0d0d0d;
+    z-index: 10;
+}
+
+.columnEmoji {
+    font-size: 1rem;
+}
+
+.columnLabel {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex: 1;
+}
+
+.columnCount {
+    background: var(--col-color);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.columnBody {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.emptyColumn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: rgba(255,255,255,0.1);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    border: 1px dashed rgba(255,255,255,0.06);
+    border-radius: 8px;
+}
+
+// Order Cards
+.orderCard {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 3px solid var(--col-color);
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+}
+
+.newCard {
+    animation: slideIn 0.4s ease-out;
+    box-shadow: 0 0 20px rgba(230,57,70,0.1);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.orderId {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--col-color);
+    letter-spacing: 0.1em;
+}
+
+.orderTime {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.05em;
+}
+
+.customerInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.customerName {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.customerPhone {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin: 0;
+}
+
+.customerAddress {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.35);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.itemsToggle {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.7rem;
+    font-family: inherit;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.15s;
+
+    &:hover {
+        background: rgba(255,255,255,0.07);
+        color: rgba(255,255,255,0.7);
+    }
+}
+
+.itemsList {
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.itemRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+}
+
+.itemQty {
+    color: rgba(255,255,255,0.35);
+    min-width: 24px;
+}
+
+.itemName {
+    color: rgba(255,255,255,0.7);
+    flex: 1;
+}
+
+.itemPrice {
+    color: rgba(255,255,255,0.4);
+    text-align: right;
+}
+
+.orderNotes {
+    margin-top: 0.25rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.35);
+    font-style: italic;
+}
+
+.cardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+}
+
+.totalAmount {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.advanceBtn {
+    background: var(--col-color);
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: inherit;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+
+    &:hover:not(:disabled) {
+        opacity: 0.85;
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.97);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
