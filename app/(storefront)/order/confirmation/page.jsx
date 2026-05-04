@@ -1,21 +1,19 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import styles from './page.module.scss'
 
 export default function ConfirmationPage() {
   const router = useRouter()
-  const [orderNumber, setOrderNumber] = useState('')
+  const searchParams = useSearchParams()
+  const orderId = searchParams.get('id') || ''
+  const orderNumber = orderId ? orderId.slice(0, 8).toUpperCase() : ''
   const [restaurantColor, setRestaurantColor] = useState('#E63946')
   const [restaurantName, setRestaurantName] = useState('Restaurant')
   const [restaurantPhone, setRestaurantPhone] = useState('')
 
   useEffect(() => {
-    // Generate order number
-    const randomOrder = Math.random().toString(36).substring(2, 10).toUpperCase()
-    setOrderNumber(randomOrder)
-
     // Get restaurant info from localStorage
     const savedColor = localStorage.getItem('ouragocms-restaurant-color')
     if (savedColor) setRestaurantColor(savedColor)

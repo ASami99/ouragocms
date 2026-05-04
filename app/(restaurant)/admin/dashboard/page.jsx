@@ -36,10 +36,8 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true)
     const [expandedOrder, setExpandedOrder] = useState(null)
     const [updatingOrder, setUpdatingOrder] = useState(null)
-    const audioCtxRef = useRef(null)
     const prevOrderIdsRef = useRef(new Set())
 
-    // Play notification sound using Web Audio API
     const playNotification = useCallback(() => {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)()
@@ -61,7 +59,6 @@ export default function DashboardPage() {
         }
     }, [])
 
-    // Browser notification
     const showBrowserNotification = useCallback((order) => {
         if (Notification.permission === 'granted') {
             new Notification('🔔 New Order!', {
@@ -71,7 +68,6 @@ export default function DashboardPage() {
         }
     }, [])
 
-    // Request notification permission
     useEffect(() => {
         if (Notification.permission === 'default') {
             Notification.requestPermission()
@@ -96,15 +92,19 @@ export default function DashboardPage() {
         }
 
         loadRestaurant().then(rpUser => {
-            if (rpUser) loadOrders(rpUser.restaurant_id)
+            if (rpUser) loadOrders(rpUser)
         })
     }, [router])
 
-    const loadOrders = async (restaurantId) => {
+    const loadOrders = async (rpUser) => {
+        // Use restaurants_id (uuid FK) if available, fall back to old restaurant_id
         const { data, error } = await supabase
             .from('orders')
             .select('*')
-            .eq('restaurant_id', restaurantId)
+            .eq(
+                rpUser.restaurants_id ? 'restaurants_id' : 'restaurant_id',
+                rpUser.restaurants_id || rpUser.restaurant_id
+            )
             .order('created_at', { ascending: false })
 
         if (!error && data) {
@@ -114,9 +114,12 @@ export default function DashboardPage() {
         setLoading(false)
     }
 
-    // Real-time subscription
+    // Real-time subscription — uses restaurants_id when available
     useEffect(() => {
         if (!restaurant) return
+
+        const filterField = restaurant.restaurants_id ? 'restaurants_id' : 'restaurant_id'
+        const filterValue = restaurant.restaurants_id || restaurant.restaurant_id
 
         const channel = supabase
             .channel('orders-realtime')
@@ -126,27 +129,23 @@ export default function DashboardPage() {
                     event: '*',
                     schema: 'public',
                     table: 'orders',
-                    filter: `restaurant_id=eq.${restaurant.restaurant_id}`,
+                    filter: `${filterField}=eq.${filterValue}`,
                 },
                 (payload) => {
                     if (payload.eventType === 'INSERT') {
                         const newOrder = payload.new
                         setOrders(prev => [newOrder, ...prev])
-
-                        // Only alert if truly new
                         if (!prevOrderIdsRef.current.has(newOrder.id)) {
                             prevOrderIdsRef.current.add(newOrder.id)
                             playNotification()
                             showBrowserNotification(newOrder)
                         }
                     }
-
                     if (payload.eventType === 'UPDATE') {
                         setOrders(prev =>
                             prev.map(o => o.id === payload.new.id ? payload.new : o)
                         )
                     }
-
                     if (payload.eventType === 'DELETE') {
                         setOrders(prev => prev.filter(o => o.id !== payload.old.id))
                     }
@@ -163,7 +162,6 @@ export default function DashboardPage() {
             .from('orders')
             .update({ status: newStatus })
             .eq('id', orderId)
-
         if (error) console.error('Failed to update order:', error)
         setUpdatingOrder(null)
     }
@@ -173,19 +171,17 @@ export default function DashboardPage() {
         router.push('/admin/login')
     }
 
-    const getOrdersByStatus = (status) =>
-        orders.filter(o => o.status === status)
+    const getOrdersByStatus = (status) => orders.filter(o => o.status === status)
 
-    const formatTime = (ts) => {
-        const date = new Date(ts)
-        return date.toLocaleTimeString('en-QA', { hour: '2-digit', minute: '2-digit' })
-    }
+    const formatTime = (ts) => new Date(ts).toLocaleTimeString('en-QA', {
+        hour: '2-digit', minute: '2-digit'
+    })
 
     const formatDate = (ts) => {
         const date = new Date(ts)
-        const today = new Date()
-        if (date.toDateString() === today.toDateString()) return 'Today'
-        return date.toLocaleDateString('en-QA', { day: 'numeric', month: 'short' })
+        return date.toDateString() === new Date().toDateString()
+            ? 'Today'
+            : date.toLocaleDateString('en-QA', { day: 'numeric', month: 'short' })
     }
 
     if (loading) {
@@ -199,7 +195,6 @@ export default function DashboardPage() {
 
     return (
         <div className={styles.page}>
-            {/* Header */}
             <header className={styles.header}>
                 <div className={styles.headerLeft}>
                     <div className={styles.headerLogo}>⬡</div>
@@ -215,10 +210,7 @@ export default function DashboardPage() {
                         </span>
                         <span className={styles.orderCountLabel}>New</span>
                     </div>
-                    <button
-                        className={styles.menuBtn}
-                        onClick={() => router.push('/admin/menu')}
-                    >
+                    <button className={styles.menuBtn} onClick={() => router.push('/admin/menu')}>
                         Menu
                     </button>
                     <button className={styles.logoutBtn} onClick={handleLogout}>
@@ -227,7 +219,6 @@ export default function DashboardPage() {
                 </div>
             </header>
 
-            {/* Kanban Board */}
             <main className={styles.kanban}>
                 {STATUSES.map(status => (
                     <div key={status.key} className={styles.column}>
@@ -241,9 +232,7 @@ export default function DashboardPage() {
 
                         <div className={styles.columnBody}>
                             {getOrdersByStatus(status.key).length === 0 && (
-                                <div className={styles.emptyColumn}>
-                                    <span>No orders</span>
-                                </div>
+                                <div className={styles.emptyColumn}><span>No orders</span></div>
                             )}
 
                             {getOrdersByStatus(status.key).map(order => (
@@ -252,7 +241,6 @@ export default function DashboardPage() {
                                     className={`${styles.orderCard} ${status.key === 'pending' ? styles.newCard : ''}`}
                                     style={{ '--col-color': status.color }}
                                 >
-                                    {/* Card Header */}
                                     <div className={styles.cardHeader}>
                                         <span className={styles.orderId}>
                                             #{order.id.slice(0, 8).toUpperCase()}
@@ -262,7 +250,6 @@ export default function DashboardPage() {
                                         </span>
                                     </div>
 
-                                    {/* Customer Info */}
                                     <div className={styles.customerInfo}>
                                         <p className={styles.customerName}>{order.customer_name}</p>
                                         <p className={styles.customerPhone}>{order.customer_phone}</p>
@@ -271,7 +258,6 @@ export default function DashboardPage() {
                                         )}
                                     </div>
 
-                                    {/* Items */}
                                     <button
                                         className={styles.itemsToggle}
                                         onClick={() => setExpandedOrder(
@@ -294,19 +280,15 @@ export default function DashboardPage() {
                                                 </div>
                                             ))}
                                             {order.notes && (
-                                                <div className={styles.orderNotes}>
-                                                    💬 {order.notes}
-                                                </div>
+                                                <div className={styles.orderNotes}>💬 {order.notes}</div>
                                             )}
                                         </div>
                                     )}
 
-                                    {/* Total */}
                                     <div className={styles.cardFooter}>
                                         <span className={styles.totalAmount}>
                                             QR {Number(order.total_qar).toFixed(2)}
                                         </span>
-
                                         {STATUS_NEXT[order.status] && (
                                             <button
                                                 className={styles.advanceBtn}
@@ -314,10 +296,7 @@ export default function DashboardPage() {
                                                 onClick={() => updateOrderStatus(order.id, STATUS_NEXT[order.status])}
                                                 disabled={updatingOrder === order.id}
                                             >
-                                                {updatingOrder === order.id
-                                                    ? '...'
-                                                    : STATUS_NEXT_LABEL[order.status]
-                                                }
+                                                {updatingOrder === order.id ? '...' : STATUS_NEXT_LABEL[order.status]}
                                             </button>
                                         )}
                                     </div>

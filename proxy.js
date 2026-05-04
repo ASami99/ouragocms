@@ -1,82 +1,97 @@
+// proxy.js
 import { NextResponse } from 'next/server'
-import { createClient } from 'next-sanity'
+import { createClient } from '@supabase/supabase-js'
 
-const ROOT_DOMAIN = process.env.ROOT_DOMAIN || 'localhost'
+const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'localhost'
 
-const sanity = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-})
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+)
 
 export async function proxy(request) {
-  const url = request.nextUrl.clone()
-  const hostname = request.headers.get('host') || ''
-  const hostWithoutPort = hostname.split(':')[0]
+    const url = request.nextUrl
+    const hostname = request.headers.get('host') || ''
+    const hostWithoutPort = hostname.split(':')[0]
 
-  let slug = null
+    // 1. Determine the restaurant slug or domain
+    let slug = null
+    let domain = null
 
-  if (hostWithoutPort === 'localhost' || hostWithoutPort === ROOT_DOMAIN) {
-    slug = url.searchParams.get('slug') || null
-  } else if (hostWithoutPort.endsWith(`.${ROOT_DOMAIN}`)) {
-    slug = hostWithoutPort.replace(`.${ROOT_DOMAIN}`, '')
-  } else if (hostWithoutPort.endsWith('.localhost')) {
-    slug = hostWithoutPort.replace('.localhost', '')
-  }
+    if (hostWithoutPort === 'localhost' || hostWithoutPort === ROOT_DOMAIN) {
+        // local development: use ?slug= parameter
+        slug = url.searchParams.get('slug') || null
+        domain = null
+    } else if (hostWithoutPort.endsWith(`.${ROOT_DOMAIN}`)) {
+        // Subdomain: restaurant-name.ourago.qa → slug
+        slug = hostWithoutPort.replace(`.${ROOT_DOMAIN}`, '')
+        domain = null
+    } else {
+        // Custom domain (like kfc.com)
+        domain = hostWithoutPort
+        slug = null
+    }
 
-  const isInternal =
-    url.pathname.startsWith('/_next') ||
-    url.pathname.startsWith('/studio') ||
-    url.pathname.startsWith('/api') ||
-    url.pathname.includes('favicon')
+    // 2. Allow internal routes to pass through without restaurant lookup
+    const isInternal =
+        url.pathname.startsWith('/_next') ||
+        url.pathname.startsWith('/api') ||
+        url.pathname.startsWith('/studio') ||
+        url.pathname.startsWith('/admin') ||
+        url.pathname.includes('favicon')
 
-  if (isInternal) {
-    return NextResponse.next()
-  }
+    if (isInternal) {
+        return NextResponse.next()
+    }
 
-  if (!slug) {
+    // 3. If no identifier, return empty headers (landing page)
+    if (!slug && !domain) {
+        const response = NextResponse.next()
+        response.headers.set('x-restaurant-id', '')
+        response.headers.set('x-restaurant-name', '')
+        response.headers.set('x-restaurant-color', '#E63946')
+        return response
+    }
+
+    // 4. Fetch restaurant from Supabase
+    let query = supabase
+        .from('restaurants')
+        .select('id, name, slug, primary_color, phone, whatsapp, email, address, logo_url, is_active')
+        .eq('is_active', true)
+
+    if (slug) {
+        query = query.eq('slug', slug)
+    } else if (domain) {
+        // domain column is nullable; use exact match
+        query = query.eq('domain', domain)
+    }
+
+    const { data: restaurant, error } = await query.maybeSingle()
+
+    if (error || !restaurant) {
+        // No restaurant found → pass through (you could show a 404 later)
+        const response = NextResponse.next()
+        response.headers.set('x-restaurant-id', '')
+        response.headers.set('x-restaurant-name', 'Not Found')
+        response.headers.set('x-restaurant-color', '#E63946')
+        return response
+    }
+
+    // 5. Inject restaurant headers
     const response = NextResponse.next()
-    response.headers.set('x-restaurant-id', '')
-    response.headers.set('x-restaurant-name', '')
-    response.headers.set('x-restaurant-color', '#E63946')
+    response.headers.set('x-restaurant-id', restaurant.id)
+    response.headers.set('x-restaurant-slug', restaurant.slug || '')
+    response.headers.set('x-restaurant-name', restaurant.name || '')
+    response.headers.set('x-restaurant-color', restaurant.primary_color || '#E63946')
+    response.headers.set('x-restaurant-phone', restaurant.phone || '')
+    response.headers.set('x-restaurant-wa', restaurant.whatsapp || '')
+    response.headers.set('x-restaurant-email', restaurant.email || '')
+    response.headers.set('x-restaurant-addr', restaurant.address || '')
+    response.headers.set('x-restaurant-logo', restaurant.logo_url || '')
+
     return response
-  }
-
-  // Fetch from Sanity
-  const restaurant = await sanity.fetch(
-    `*[_type == "restaurant" && slug.current == $slug && isActive == true][0] {
-      _id,
-      name,
-      "slug": slug.current,
-      "logoUrl": logo.asset->url,
-      phone,
-      whatsapp,
-      email,
-      address,
-      primaryColor,
-    }`,
-    { slug }
-  )
-
-  if (!restaurant) {
-    url.pathname = '/not-found'
-    return NextResponse.rewrite(url)
-  }
-
-  const response = NextResponse.next()
-  response.headers.set('x-restaurant-id',    restaurant._id)
-  response.headers.set('x-restaurant-slug',  restaurant.slug)
-  response.headers.set('x-restaurant-name',  restaurant.name)
-  response.headers.set('x-restaurant-color', restaurant.primaryColor || '#E63946')
-  response.headers.set('x-restaurant-phone', restaurant.phone || '')
-  response.headers.set('x-restaurant-wa',    restaurant.whatsapp || '')
-  response.headers.set('x-restaurant-email', restaurant.email || '')
-  response.headers.set('x-restaurant-addr',  restaurant.address || '')
-  response.headers.set('x-restaurant-logo',  restaurant.logoUrl || '')
-  return response
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+    matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 }

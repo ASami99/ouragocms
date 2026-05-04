@@ -54,23 +54,32 @@ export default function CartPage() {
         setIsSubmitting(true)
 
         const orderData = {
+            restaurantsId: localStorage.getItem('ouragocms-restaurant-id'),
             customerName,
             customerPhone,
             customerAddress,
             items: cart,
             totalAmount,
             totalItems,
-            restaurantId: cart[0]?.restaurant?._ref || cart[0]?.restaurantId,
             restaurantName: localStorage.getItem('ouragocms-restaurant-name') || 'Restaurant',
-            orderDate: new Date().toISOString(),
         }
 
-        // TODO: Submit to Supabase + Send notifications
-        console.log('Order submitted:', orderData)
+        const res = await fetch('/api/order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData),
+        })
 
-        // Clear cart and redirect
+        if (!res.ok) {
+            const err = await res.json()
+            console.error('Order failed:', err)
+            setIsSubmitting(false)
+            return
+        }
+
+        const { orderId } = await res.json()
         localStorage.removeItem('ouragocms-cart')
-        router.push('/order/confirmation')
+        router.push(`/order/confirmation?id=${orderId}`)
     }
 
     if (cart.length === 0) {
