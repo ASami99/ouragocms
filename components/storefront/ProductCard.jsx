@@ -8,12 +8,14 @@ export default function ProductCard({ item, onCardClick, color }) {
   const [imgError, setImgError] = useState(false)
 
   const handleClick = () => {
-    onCardClick(item)
+    if (item.isAvailable) {
+      onCardClick(item)
+    }
   }
 
   return (
     <article 
-      className={styles.card} 
+      className={`${styles.card} ${!item.isAvailable ? styles.disabled : ''}`}
       style={{ '--primary': color }}
       onClick={handleClick}
     >

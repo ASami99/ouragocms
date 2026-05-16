@@ -38,25 +38,31 @@ export default function DashboardPage() {
     const [updatingOrder, setUpdatingOrder] = useState(null)
     const prevOrderIdsRef = useRef(new Set())
 
+    // const playNotification = useCallback(() => {
+    //     try {
+    //         const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    //         const times = [0, 0.15, 0.3]
+    //         times.forEach(time => {
+    //             const osc = ctx.createOscillator()
+    //             const gain = ctx.createGain()
+    //             osc.connect(gain)
+    //             gain.connect(ctx.destination)
+    //             osc.frequency.value = 880
+    //             osc.type = 'sine'
+    //             gain.gain.setValueAtTime(0.3, ctx.currentTime + time)
+    //             gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + time + 0.2)
+    //             osc.start(ctx.currentTime + time)
+    //             osc.stop(ctx.currentTime + time + 0.2)
+    //         })
+    //     } catch (e) {
+    //         console.log('Audio not available')
+    //     }
+    // }, [])
+
     const playNotification = useCallback(() => {
-        try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)()
-            const times = [0, 0.15, 0.3]
-            times.forEach(time => {
-                const osc = ctx.createOscillator()
-                const gain = ctx.createGain()
-                osc.connect(gain)
-                gain.connect(ctx.destination)
-                osc.frequency.value = 880
-                osc.type = 'sine'
-                gain.gain.setValueAtTime(0.3, ctx.currentTime + time)
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + time + 0.2)
-                osc.start(ctx.currentTime + time)
-                osc.stop(ctx.currentTime + time + 0.2)
-            })
-        } catch (e) {
-            console.log('Audio not available')
-        }
+        const audio = new Audio('/sounds/order-alert.wav')
+        audio.play().catch(() => {
+        })
     }, [])
 
     const showBrowserNotification = useCallback((order) => {
@@ -87,7 +93,20 @@ export default function DashboardPage() {
                 .single()
 
             if (!rpUser) { router.push('/admin/login'); return }
-            setRestaurant(rpUser)
+
+            // Fetch the real restaurant name from restaurants table
+            const { data: restaurantData } = await supabase
+                .from('restaurants')
+                .select('name')
+                .eq('id', rpUser.restaurants_id)
+                .single()
+
+            setRestaurant({
+                ...rpUser,
+                restaurant_name: restaurantData?.name || 'Restaurant'
+            })
+
+            // setRestaurant(rpUser)
             return rpUser
         }
 
@@ -101,10 +120,7 @@ export default function DashboardPage() {
         const { data, error } = await supabase
             .from('orders')
             .select('*')
-            .eq(
-                rpUser.restaurants_id ? 'restaurants_id' : 'restaurant_id',
-                rpUser.restaurants_id || rpUser.restaurant_id
-            )
+            .eq('restaurants_id', rpUser.restaurants_id)
             .order('created_at', { ascending: false })
 
         if (!error && data) {
@@ -129,7 +145,8 @@ export default function DashboardPage() {
                     event: '*',
                     schema: 'public',
                     table: 'orders',
-                    filter: `${filterField}=eq.${filterValue}`,
+                    // filter: `${filterField}=eq.${filterValue}`,
+                    filter: `restaurants_id=eq.${restaurant.restaurants_id}`,
                 },
                 (payload) => {
                     if (payload.eventType === 'INSERT') {
@@ -158,12 +175,19 @@ export default function DashboardPage() {
 
     const updateOrderStatus = async (orderId, newStatus) => {
         setUpdatingOrder(orderId)
-        const { error } = await supabase
-            .from('orders')
-            .update({ status: newStatus })
-            .eq('id', orderId)
-        if (error) console.error('Failed to update order:', error)
-        setUpdatingOrder(null)
+        try {
+            const res = await fetch(`/api/orders/${orderId}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus }),
+            })
+            if (!res.ok) {
+                const err = await res.json()
+                console.error('Failed to update order:', err)
+            }
+        } finally {
+            setUpdatingOrder(null)
+        }
     }
 
     const handleLogout = async () => {
@@ -213,6 +237,9 @@ export default function DashboardPage() {
                     <button className={styles.menuBtn} onClick={() => router.push('/admin/menu')}>
                         Menu
                     </button>
+                    <button className={styles.menuBtn} onClick={() => router.push('/admin/modifiers')}>
+                        Modifiers
+                    </button>
                     <button className={styles.logoutBtn} onClick={handleLogout}>
                         Sign Out
                     </button>
@@ -243,7 +270,7 @@ export default function DashboardPage() {
                                 >
                                     <div className={styles.cardHeader}>
                                         <span className={styles.orderId}>
-                                            #{order.id.slice(0, 8).toUpperCase()}
+                                            Order Id #{order.id.slice(0, 8).toUpperCase()}
                                         </span>
                                         <span className={styles.orderTime}>
                                             {formatDate(order.created_at)} {formatTime(order.created_at)}

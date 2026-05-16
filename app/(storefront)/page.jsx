@@ -68,7 +68,7 @@ export default async function StorefrontPage({ searchParams }) {
       .from('menu_items')
       .select(`id, name, description, price, image_url, category_id, is_available, is_featured, position, item_variants ( id, name, price, is_available ), item_addons ( id, name, price )`)
       .eq('restaurants_id', restaurant.id)
-      .eq('is_available', true)
+      // .eq('is_available', true)
       .order('position', { ascending: true }),
   ])
 
