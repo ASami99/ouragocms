@@ -219,30 +219,17 @@ export default function DashboardPage() {
 
     return (
         <div className={styles.page}>
+
             <header className={styles.header}>
                 <div className={styles.headerLeft}>
-                    <div className={styles.headerLogo}>⬡</div>
-                    <div>
-                        <h1 className={styles.headerTitle}>{restaurant?.restaurant_name}</h1>
-                        <p className={styles.headerSub}>Order Dashboard</p>
-                    </div>
+                    <h1 className={styles.headerTitle}>Dashboard</h1>
+                    <p className={styles.headerSub}>Real‑time orders</p>
                 </div>
                 <div className={styles.headerRight}>
                     <div className={styles.orderCount}>
-                        <span className={styles.orderCountNum}>
-                            {getOrdersByStatus('pending').length}
-                        </span>
+                        <span className={styles.orderCountNum}>{getOrdersByStatus('pending').length}</span>
                         <span className={styles.orderCountLabel}>New</span>
                     </div>
-                    <button className={styles.menuBtn} onClick={() => router.push('/admin/menu')}>
-                        Menu
-                    </button>
-                    <button className={styles.menuBtn} onClick={() => router.push('/admin/modifiers')}>
-                        Modifiers
-                    </button>
-                    <button className={styles.logoutBtn} onClick={handleLogout}>
-                        Sign Out
-                    </button>
                 </div>
             </header>
 

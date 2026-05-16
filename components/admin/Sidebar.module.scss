@@ -1,0 +1,111 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    background: #0d0d0d;
+    border-right: 1px solid #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    font-family: system-ui, sans-serif;
+}
+
+.brand {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    color: #E63946;
+}
+
+.brandName {
+    font-weight: 700;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.restaurantName {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.nav {
+    flex: 1;
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #999;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+
+    &:hover {
+        background: #1a1a1a;
+        color: #ccc;
+    }
+
+    &.active {
+        background: #1b1b1b;
+        color: #fff;
+        font-weight: 500;
+    }
+}
+
+.navIcon {
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+}
+
+.footer {
+    padding: 16px 10px;
+    border-top: 1px solid #1a1a1a;
+}
+
+.logoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #999;
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover {
+        background: #1a1a1a;
+        color: #E63946;
+    }
+}
