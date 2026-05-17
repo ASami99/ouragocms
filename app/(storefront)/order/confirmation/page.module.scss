@@ -82,8 +82,9 @@
 
     span {
         display: flex;
+        justify-content: flex-start;
         align-items: center;
-        justify-content: space-between;
+        gap: 8px;
         font-size: 0.95rem;
 
         &::before {
@@ -110,11 +111,6 @@
     background: #fff8e7;
     border-radius: 12px;
     margin-bottom: 28px;
-
-    &::before {
-        content: '🕒 ';
-        margin-right: 6px;
-    }
 }
 
 .backBtn {
@@ -187,5 +183,93 @@
         width: 90px;
         height: 90px;
         font-size: 45px;
+    }
+}
+
+
+// Order item list
+.orderItems {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 20px 0;
+    text-align: left;
+
+    h3 {
+        margin: 0 0 12px 0;
+        font-size: 0.95rem;
+        color: #666;
+        font-weight: 600;
+    }
+}
+
+.orderItem {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+}
+
+.orderItemMain {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+}
+
+.orderItemQty {
+    font-weight: 700;
+    color: var(--primary, #E63946);
+    min-width: 28px;
+}
+
+.orderItemName {
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 0.9rem;
+}
+
+.orderItemVariant {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: #F4A261;
+    background: rgba(244, 162, 97, 0.1);
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+}
+
+.orderItemAddons {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+.orderItemPrice {
+    font-weight: 700;
+    color: #1a1a1a;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.orderTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top: 2px solid #e0e0e0;
+    font-size: 1rem;
+    font-weight: 700;
+
+    strong {
+        color: var(--primary, #E63946);
+        font-size: 1.2rem;
     }
 }

@@ -126,8 +126,8 @@ export default function ModifiersPage() {
     return (
         <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#e0e0e0', fontFamily: 'system-ui' }}>
             <header style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '20px 24px', borderBottom: '1px solid #1a1a1a' }}>
-                <button onClick={() => router.push('/admin/menu')} style={{ padding: '8px 16px', border: '1px solid #2a2a2a', borderRadius: 8, background: '#111', color: '#ccc', cursor: 'pointer' }}>
-                    ← Menu
+                <button onClick={() => router.push('/admin/dashboard')} style={{ padding: '8px 16px', border: '1px solid #2a2a2a', borderRadius: 8, background: '#111', color: '#ccc', cursor: 'pointer' }}>
+                    ← Dashboard
                 </button>
                 <h1 style={{ flex: 1, margin: 0, fontSize: '1.3rem' }}>Modifier Groups</h1>
                 <button

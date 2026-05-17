@@ -78,6 +78,8 @@ export default function CartPage() {
         }
 
         const { orderId } = await res.json()
+        localStorage.setItem('ouragocms-last-order-items', JSON.stringify(cart))
+        localStorage.setItem('ouragocms-last-order-id', orderId)
         localStorage.removeItem('ouragocms-cart')
         router.push(`/order/confirmation?id=${orderId}`)
     }

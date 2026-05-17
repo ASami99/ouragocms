@@ -1,10 +1,10 @@
-import { createPublicClient, createAdminClient  } from '@/lib/supabaseClient'
+import { createPublicClient, createAdminClient } from '@/lib/supabaseClient'
 import StoreHeader from '@/components/storefront/StoreHeader'
 import ProductGrid from '@/components/storefront/ProductGrid'
 import styles from './page.module.scss'
 
 export default async function StorefrontPage({ searchParams }) {
-  const supabase = createPublicClient() 
+  const supabase = createPublicClient()
 
   const params = await searchParams
   const slug = params?.slug
@@ -64,12 +64,25 @@ export default async function StorefrontPage({ searchParams }) {
       .eq('is_visible', true)
       .order('position', { ascending: true }),
 
-    supabase
-      .from('menu_items')
-      .select(`id, name, description, price, image_url, category_id, is_available, is_featured, position, item_variants ( id, name, price, is_available ), item_addons ( id, name, price )`)
-      .eq('restaurants_id', restaurant.id)
-      // .eq('is_available', true)
-      .order('position', { ascending: true }),
+ supabase
+  .from('menu_items')
+  .select(`
+    id, name, description, price, image_url, category_id,
+    is_available, is_featured, position,
+    has_variants, variant_label,
+    item_variants ( id, name, price, is_available ),
+    item_modifier_groups (
+      group_id,
+      modifier_groups (
+        id,
+        name,
+        selection_type,
+        modifiers ( id, name, price, is_available )
+      )
+    )
+  `)
+  .eq('restaurants_id', restaurant.id)
+  .order('position', { ascending: true }),
   ])
 
   // Normalize to match existing ProductGrid component expectations
@@ -89,7 +102,7 @@ export default async function StorefrontPage({ searchParams }) {
     isAvailable: item.is_available,
     isPopular: item.is_featured,
     hasVariants: item.item_variants && item.item_variants.length > 0,
-    variantLabel: 'Choose Option', // future: store per restaurant
+    variantLabel: item.variant_label || 'Choose Option',
     variants: item.item_variants
       ? item.item_variants.map(v => ({
         name: v.name,
@@ -97,13 +110,16 @@ export default async function StorefrontPage({ searchParams }) {
         isAvailable: v.is_available,
       }))
       : [],
-    hasAddons: item.item_addons && item.item_addons.length > 0,
-    addons: item.item_addons
-      ? item.item_addons.map(a => ({
-        name: a.name,
-        priceQar: a.price,
-      }))
-      : [],
+    // ─── New modifier mapping ───
+    hasAddons: item.item_modifier_groups?.length > 0,
+    addons: item.item_modifier_groups?.flatMap(ig =>
+      ig.modifier_groups?.modifiers?.map(m => ({
+        name: m.name,
+        priceQar: m.price,
+        groupName: ig.modifier_groups.name,
+      })) || []
+    ) || [],
+
   }))
 
   return (

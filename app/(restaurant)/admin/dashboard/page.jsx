@@ -285,11 +285,33 @@ export default function DashboardPage() {
                                     {expandedOrder === order.id && (
                                         <div className={styles.itemsList}>
                                             {(order.items_json || []).map((item, idx) => (
+                                                // <div key={idx} className={styles.itemRow}>
+                                                //     <span className={styles.itemQty}>×{item.quantity}</span>
+                                                //     <span className={styles.itemName}>{item.name}</span>
+                                                //     <span className={styles.itemPrice}>
+                                                //         QR {(item.totalPrice || item.unitPrice * item.quantity || 0).toFixed(2)}
+                                                //     </span>
+                                                // </div>
                                                 <div key={idx} className={styles.itemRow}>
-                                                    <span className={styles.itemQty}>×{item.quantity}</span>
-                                                    <span className={styles.itemName}>{item.name}</span>
+                                                    <div className={styles.itemMain}>
+                                                        <span className={styles.itemQty}>×{item.quantity}</span>
+                                                        <div className={styles.itemDetails}>
+                                                            <span className={styles.itemName}>{item.name}</span>
+                                                            {item.selectedVariant && (
+                                                                <span className={styles.itemVariant}>{item.selectedVariant.name}</span>
+                                                            )}
+                                                            {item.selectedAddons?.length > 0 && (
+                                                                <span className={styles.itemAddons}>
+                                                                    + {item.selectedAddons.map(a => a.name).join(', ')}
+                                                                </span>
+                                                            )}
+                                                            {item.specialInstructions && (
+                                                                <span className={styles.itemNotes}>📝 {item.specialInstructions}</span>
+                                                            )}
+                                                        </div>
+                                                    </div>
                                                     <span className={styles.itemPrice}>
-                                                        QR {(item.totalPrice || item.unitPrice * item.quantity || 0).toFixed(2)}
+                                                        QR {(item.totalPrice || 0).toFixed(2)}
                                                     </span>
                                                 </div>
                                             ))}

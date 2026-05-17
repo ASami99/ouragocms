@@ -193,19 +193,19 @@ export default function ProductModal({
                             </span>
                         </div>
                     </div>
-
-                    {/* Add to Cart Button */}
-                    <button
-                        className={`${styles.addToCartBtn} ${added ? styles.added : ''}`}
-                        onClick={handleAddToCart}
-                        disabled={
-                            (item.hasVariants && !selectedVariant) ||
-                            (selectedVariant?.isAvailable === false)
-                        }
-                    >
-                        {added ? '✓ Added to Cart!' : 'Add to Cart'}
-                    </button>
                 </div>
+                {/* Add to Cart Button */}
+                <button
+                    className={`${styles.addToCartBtn} ${added ? styles.added : ''}`}
+                    onClick={handleAddToCart}
+                    disabled={
+                        (item.hasVariants && !selectedVariant) ||
+                        (selectedVariant?.isAvailable === false)
+                    }
+                >
+                    {added ? '✓ Added to Cart!' : 'Add to Cart'}
+                </button>
+
             </div>
         </div>
     )
