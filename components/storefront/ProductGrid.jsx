@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation'
 import ProductCard from './ProductCard'
 import ProductModal from './ProductModal'
 import styles from './ProductGrid.module.scss'
-
-export default function ProductGrid({ categories, items, restaurantId, color, restaurantName, restaurantPhone }) {
+export default function ProductGrid({ categories, items, restaurantId, color, restaurantName, restaurantPhone, isOrderingEnabled = true }) {
   const router = useRouter()
   const [cart, setCart] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
@@ -48,7 +47,7 @@ export default function ProductGrid({ categories, items, restaurantId, color, re
 
       return newCart
     })
-  }, [restaurantName, color, restaurantId , restaurantPhone])
+  }, [restaurantName, color, restaurantId, restaurantPhone])
 
   function getItemsForCategory(categoryId) {
     return items.filter((item) => item.categoryId === categoryId)
@@ -97,6 +96,7 @@ export default function ProductGrid({ categories, items, restaurantId, color, re
                     item={item}
                     color={color}
                     onCardClick={handleCardClick}
+                    isOrderingEnabled={isOrderingEnabled}
                   />
                 ))}
               </div>
@@ -118,6 +118,7 @@ export default function ProductGrid({ categories, items, restaurantId, color, re
                     item={item}
                     color={color}
                     onCardClick={handleCardClick}
+                    isOrderingEnabled={isOrderingEnabled}
                   />
                 ))}
               </div>
@@ -133,10 +134,11 @@ export default function ProductGrid({ categories, items, restaurantId, color, re
         onClose={() => setIsModalOpen(false)}
         onAddToCart={handleAddToCart}
         color={color}
+        isOrderingEnabled={isOrderingEnabled}
       />
 
       {/* Floating cart bar */}
-      {totalItems > 0 && (
+      {totalItems > 0 && isOrderingEnabled && (
         <div className={styles.cartBar}>
           <div className={styles.cartInfo}>
             <span className={styles.cartCount}>

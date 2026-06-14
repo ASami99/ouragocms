@@ -1,0 +1,41 @@
+// ─── Admin Theme Variables ────────────────────────────────────────────────────
+// Dark mode defaults (matches your current admin look)
+:root {
+  --admin-bg-page: #0a0a0a;
+  --admin-bg-surface: #111111;
+  --admin-bg-elevated: #1a1a1a;
+  --admin-bg-hover: #1a1a1a;
+  --admin-bg-input: #111111;
+
+  --admin-text-primary: #e0e0e0;
+  --admin-text-secondary: #999999;
+  --admin-text-muted: #666666;
+  --admin-text-inverse: #ffffff;
+
+  --admin-border: #2a2a2a;
+  --admin-border-light: #1a1a1a;
+
+  --admin-brand: #E63946;
+  --admin-brand-hover: #c1121f;
+
+  --admin-success: #4CAF50;
+  --admin-warning: #F4A261;
+  --admin-danger: #E63946;
+}
+
+// Light mode overrides (applied when <html data-admin-theme="light">)
+[data-admin-theme="light"] {
+  --admin-bg-page: #fafafa;
+  --admin-bg-surface: #ffffff;
+  --admin-bg-elevated: #ffffff;
+  --admin-bg-hover: #f0f0f0;
+  --admin-bg-input: #ffffff;
+
+  --admin-text-primary: #1a1a1a;
+  --admin-text-secondary: #666666;
+  --admin-text-muted: #999999;
+  --admin-text-inverse: #1a1a1a;
+
+  --admin-border: #e0e0e0;
+  --admin-border-light: #eeeeee;
+}

@@ -1,6 +1,6 @@
 .loadingScreen {
     min-height: 100vh;
-    background: #080808;
+    background: var(--admin-bg-page);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,7 +14,7 @@
 .loadingDot {
     width: 8px;
     height: 8px;
-    background: #E63946;
+    background: var(--admin-brand);
     border-radius: 50%;
     animation: blink 1s ease-in-out infinite;
 }
@@ -33,7 +33,7 @@
 
 .page {
     min-height: 100vh;
-    background: #080808;
+    background: var(--admin-bg-page);
     font-family: 'DM Mono', 'Courier New', monospace;
     display: flex;
     flex-direction: column;
@@ -61,14 +61,14 @@
 
 .headerLogo {
     font-size: 1.5rem;
-    color: #E63946;
+    color: var(--admin-brand);
     filter: drop-shadow(0 0 8px rgba(230, 57, 70, 0.5));
 }
 
 .headerTitle {
     font-size: 1rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--admin-text-inverse);
     margin: 0;
     letter-spacing: 0.05em;
 }
@@ -100,7 +100,7 @@
 .orderCountNum {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #E63946;
+    color: var(--admin-brand);
     line-height: 1;
 }
 
@@ -125,7 +125,7 @@
 
     &:hover {
         background: rgba(255, 255, 255, 0.08);
-        color: #fff;
+        color: var(--admin-text-inverse);
     }
 }
 
@@ -142,8 +142,8 @@
     transition: all 0.2s;
 
     &:hover {
-        border-color: #E63946;
-        color: #E63946;
+        border-color: var(--admin-brand);
+        color: var(--admin-brand);
     }
 }
 
@@ -165,7 +165,7 @@
 }
 
 .column {
-    background: #0d0d0d;
+    background: var(--admin-bg-surface);
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 65px);
@@ -179,7 +179,7 @@
     border-bottom: 2px solid var(--col-color);
     position: sticky;
     top: 65px;
-    background: #0d0d0d;
+    background: var(--admin-bg-surface);
     z-index: 10;
 }
 
@@ -190,7 +190,7 @@
 .columnLabel {
     font-size: 0.7rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--admin-text-inverse);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     flex: 1;
@@ -198,7 +198,7 @@
 
 .columnCount {
     background: var(--col-color);
-    color: #fff;
+    color: var(--admin-text-inverse);
     font-size: 0.65rem;
     font-weight: 700;
     width: 20px;
@@ -222,10 +222,10 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    color: rgba(255, 255, 255, 0.1);
+    color: var(--admin-text-secondary);
     font-size: 0.7rem;
     letter-spacing: 0.1em;
-    border: 1px dashed rgba(255, 255, 255, 0.06);
+    border: 1px dashed var(--admin-border);
     border-radius: 8px;
 }
 
@@ -233,7 +233,7 @@
 .orderCard {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.07);
-    border-left: 3px solid var(--col-color);
+    border: 3px solid var(--col-color);
     border-radius: 10px;
     padding: 1rem;
     display: flex;
@@ -292,19 +292,19 @@
 .customerName {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--admin-text-inverse);
     margin: 0;
 }
 
 .customerPhone {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--admin-text-inverse);
     margin: 0;
 }
 
 .customerAddress {
     font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--admin-text-secondary);
     margin: 0;
     line-height: 1.4;
 }
@@ -314,7 +314,7 @@
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 6px;
     padding: 0.4rem 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--admin-text-primary);
     font-size: 0.7rem;
     font-family: inherit;
     letter-spacing: 0.05em;
@@ -326,7 +326,7 @@
 
     &:hover {
         background: rgba(255, 255, 255, 0.07);
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--admin-text-inverse);
     }
 }
 
@@ -347,17 +347,17 @@
 }
 
 .itemQty {
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--admin-text-secondary);
     min-width: 24px;
 }
 
 .itemName {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--admin-text-primary);
     flex: 1;
 }
 
 .itemPrice {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--admin-text-primary);
     text-align: right;
 }
 
@@ -380,7 +380,7 @@
 .totalAmount {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--admin-text-inverse);
 }
 
 .advanceBtn {
@@ -388,7 +388,7 @@
     border: none;
     border-radius: 6px;
     padding: 0.4rem 0.75rem;
-    color: #fff;
+    color: var(--admin-text-inverse);
     font-size: 0.65rem;
     font-weight: 600;
     font-family: inherit;
@@ -424,7 +424,7 @@
 
 .itemVariant {
     font-size: 0.8rem;
-    color: #F4A261;
+    color: var(--admin-warning);
     background: rgba(244, 162, 97, 0.1);
     padding: 1px 6px;
     border-radius: 4px;
@@ -434,7 +434,7 @@
 
 .itemAddons {
     font-size: 0.75rem;
-    color: #888;
+    color: var(--admin-text-secondary);
     font-style: italic;
 }
 

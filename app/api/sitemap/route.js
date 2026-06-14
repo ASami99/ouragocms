@@ -1,42 +1,26 @@
-import { headers } from 'next/headers'
 import { createPublicClient } from '@/lib/supabaseClient'
 
 export async function GET() {
-    const headersList = await headers()
-    const restaurantId = headersList.get('x-restaurant-id')
-    const host = headersList.get('host') || 'localhost:3000'
-    const baseUrl = `https://${host}`
+    const supabase = createPublicClient()
+    const baseUrl = process.env.NEXT_PUBLIC_ROOT_DOMAIN
+        ? `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
+        : 'http://localhost:3000'
 
     const today = new Date().toISOString().split('T')[0]
 
-    if (!restaurantId) {
-        const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://ourago.qa/</loc>
-    <lastmod>${today}</lastmod>
-  </url>
-</urlset>`
-        return new Response(xml, {
-            headers: { 'Content-Type': 'application/xml' },
-        })
-    }
+    const { data: restaurants } = await supabase
+        .from('restaurants')
+        .select('slug')
+        .eq('is_active', true)
 
-    const supabase = createPublicClient()
-    const { data: items } = await supabase
-        .from('items')
-        .select('id, name')
-        .eq('restaurant_id', restaurantId)
-        .eq('is_available', true)
-
-    const itemUrls = (items || [])
+    const restaurantUrls = (restaurants || [])
         .map(
-            (item) => `
+            (r) => `
   <url>
-    <loc>${baseUrl}/item/${item.id}</loc>
+    <loc>${baseUrl}/?slug=${r.slug}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>`
         )
         .join('')
@@ -48,7 +32,7 @@ export async function GET() {
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-  </url>${itemUrls}
+  </url>${restaurantUrls}
 </urlset>`
 
     return new Response(xml, {

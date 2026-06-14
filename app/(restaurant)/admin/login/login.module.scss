@@ -1,6 +1,6 @@
 .page {
     min-height: 100vh;
-    background: #080808;
+    background: var(--admin-bg-page);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -42,7 +42,7 @@
 
 .logo {
     font-size: 2.5rem;
-    color: #E63946;
+    color: var(--admin-brand);
     line-height: 1;
     filter: drop-shadow(0 0 20px rgba(230, 57, 70, 0.5));
     animation: pulse 3s ease-in-out infinite;
@@ -56,7 +56,7 @@
 .brandName {
     font-size: 1.75rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--admin-text-inverse);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     margin: 0;
@@ -64,7 +64,7 @@
 
 .brandSub {
     font-size: 0.7rem;
-    color: #E63946;
+    color: var(--admin-brand);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     margin: 0;
@@ -91,7 +91,7 @@
 .formTitle {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--admin-text-inverse);
     margin: 0 0 0.25rem;
     letter-spacing: 0.05em;
 }
@@ -121,7 +121,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    color: #fff;
+    color: var(--admin-text-inverse);
     font-size: 0.875rem;
     font-family: inherit;
     outline: none;
@@ -132,7 +132,7 @@
     }
 
     &:focus {
-        border-color: #E63946;
+        border-color: var(--admin-brand);
         background: rgba(230, 57, 70, 0.05);
     }
 }
@@ -142,7 +142,7 @@
     border: 1px solid rgba(230, 57, 70, 0.3);
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    color: #E63946;
+    color: var(--admin-brand);
     font-size: 0.8rem;
     letter-spacing: 0.03em;
     display: flex;
@@ -151,8 +151,8 @@
 }
 
 .submitBtn {
-    background: #E63946;
-    color: #fff;
+    background: var(--admin-brand);
+    color: var(--admin-text-inverse);
     border: none;
     border-radius: 8px;
     padding: 0.875rem;
@@ -168,7 +168,7 @@
     margin-top: 0.5rem;
 
     &:hover:not(:disabled) {
-        background: #c1121f;
+        background: var(--admin-brand-hover);
         box-shadow: 0 4px 20px rgba(230, 57, 70, 0.4);
     }
 
@@ -186,7 +186,7 @@
     width: 18px;
     height: 18px;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #fff;
+    border-top-color: var(--admin-text-inverse);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
 }

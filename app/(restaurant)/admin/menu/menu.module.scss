@@ -1,7 +1,7 @@
 .page {
     min-height: 100vh;
-    background: #0a0a0a;
-    color: #e0e0e0;
+    background: var(--admin-bg-page);
+    color: var(--admin-text-primary);
     font-family: system-ui, sans-serif;
 }
 
@@ -10,31 +10,32 @@
     align-items: center;
     gap: 16px;
     padding: 20px 24px;
-    border-bottom: 1px solid #1a1a1a;
-    background: #0d0d0d;
+    border-bottom: 1px solid var(--admin-border);
+    background: var(--admin-bg-surface);
 
     h1 {
         margin: 0;
         font-size: 1.3rem;
         font-weight: 600;
         flex: 1;
+        color: var(--admin-text-inverse);
     }
 }
 
 .backBtn,
 .addCategoryBtn {
     padding: 8px 16px;
-    border: 1px solid #2a2a2a;
+    border: 1px solid var(--admin-border);
     border-radius: 8px;
-    background: #111;
-    color: #ccc;
+    background: var(--admin-bg-input);
+    color: var(--admin-text-primary);
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.2s;
 
     &:hover {
-        background: #1a1a1a;
-        border-color: #3a3a3a;
+        background: var(--admin-bg-hover);
+        border-color: var(--admin-border);
     }
 }
 
@@ -52,13 +53,13 @@
     justify-content: space-between;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid var(--admin-border);
 
     h2 {
         margin: 0;
         font-size: 1.1rem;
         font-weight: 600;
-        color: #fff;
+        color: var(--admin-text-inverse);
     }
 }
 
@@ -71,17 +72,17 @@
 
 .addItemBtn {
     padding: 6px 14px;
-    border: 1px dashed #3a3a3a;
+    border: 1px dashed var(--admin-border);
     border-radius: 6px;
     background: transparent;
-    color: #999;
+    color: var(--admin-text-secondary);
     cursor: pointer;
     font-size: 0.85rem;
     transition: all 0.2s;
 
     &:hover {
-        border-color: #555;
-        color: #ccc;
+        border-color: var(--admin-border);
+        color: var(--admin-text-primary);
     }
 }
 
@@ -95,13 +96,13 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    background: #111;
-    border: 1px solid #1a1a1a;
+    background: var(--admin-bg-input);
+    border: 1px solid var(--admin-border);
     border-radius: 10px;
     transition: all 0.2s;
 
     &:hover {
-        border-color: #2a2a2a;
+        border-color: var(--admin-border);
     }
 
     &.soldOut {
@@ -120,19 +121,19 @@
         margin: 0 0 4px 0;
         font-size: 1rem;
         font-weight: 600;
-        color: #fff;
+        color: var(--admin-text-inverse);
     }
 
     p {
         margin: 0 0 4px 0;
         font-size: 0.85rem;
-        color: #888;
+        color: var(--admin-text-secondary);
     }
 }
 
 .itemPrice {
     font-weight: 700;
-    color: #4CAF50;
+    color: var(--admin-success);
     font-size: 0.95rem;
 }
 
@@ -151,13 +152,13 @@
     font-size: 0.8rem;
     padding: 4px 10px;
     border-radius: 20px;
-    background: #1a1a1a;
-    color: #999;
+    background: var(--admin-bg-hover);
+    color: var(--admin-text-secondary);
     transition: all 0.2s;
 
     input:checked+& {
         background: #1b3a1b;
-        color: #4CAF50;
+        color: var(--admin-success);
     }
 }
 
@@ -172,7 +173,7 @@
     transition: all 0.2s;
 
     &:hover {
-        background: #1a1a1a;
+        background: var(--admin-bg-hover);
     }
 }
 
@@ -181,7 +182,7 @@
 }
 
 .emptyMessage {
-    color: #666;
+    color: var(--admin-text-muted);
     font-style: italic;
     padding: 20px;
     text-align: center;
@@ -192,9 +193,9 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    color: #888;
+    color: var(--admin-text-secondary);
     font-size: 1rem;
-    background: #0a0a0a;
+    background: var(--admin-bg-page);
 }
 
 // Modal
@@ -209,8 +210,8 @@
 }
 
 .modal {
-    background: #111;
-    border: 1px solid #2a2a2a;
+    background: var(--admin-bg-input);
+    border: 1px solid var(--admin-border);
     border-radius: 16px;
     padding: 24px;
     width: 90%;
@@ -221,13 +222,13 @@
     h2 {
         margin: 0 0 20px 0;
         font-size: 1.2rem;
-        color: #fff;
+        color: var(--admin-text-inverse);
     }
 
     label {
         display: block;
         font-size: 0.85rem;
-        color: #999;
+        color: var(--admin-text-secondary);
         margin: 12px 0 4px;
     }
 
@@ -236,16 +237,16 @@
     select {
         width: 100%;
         padding: 10px 12px;
-        border: 1px solid #2a2a2a;
+        border: 1px solid var(--admin-border);
         border-radius: 8px;
-        background: #0a0a0a;
-        color: #e0e0e0;
+        background: var(--admin-bg-page);
+        color: var(--admin-text-primary);
         font-size: 0.95rem;
         font-family: inherit;
 
         &:focus {
             outline: none;
-            border-color: #444;
+            border-color: var(--admin-brand);
         }
     }
 
@@ -273,20 +274,20 @@
 }
 
 .cancelBtn {
-    background: #1a1a1a;
-    color: #ccc;
+    background: var(--admin-bg-hover);
+    color: var(--admin-text-primary);
 
     &:hover {
-        background: #2a2a2a;
+        background: var(--admin-border);
     }
 }
 
 .saveBtn {
-    background: #E63946;
+    background: var(--admin-brand);
     color: white;
 
     &:hover:not(:disabled) {
-        background: #c1121f;
+        background: var(--admin-brand-hover);
     }
 
     &:disabled {
@@ -302,7 +303,7 @@
     gap: 10px;
     cursor: pointer;
     user-select: none;
-    color: #ccc;
+    color: var(--admin-text-primary);
     font-size: 0.9rem;
     margin: 15px 0;
 
@@ -314,7 +315,7 @@
 .toggleSwitch {
     width: 40px;
     height: 22px;
-    background: #2a2a2a;
+    background: var(--admin-border);
     border-radius: 11px;
     position: relative;
     transition: background 0.2s;
@@ -327,14 +328,14 @@
         left: 3px;
         width: 16px;
         height: 16px;
-        background: #888;
+        background: var(--admin-text-secondary);
         border-radius: 50%;
         transition: all 0.2s;
     }
 }
 
 .variantToggle input:checked+.toggleSwitch {
-    background: #E63946;
+    background: var(--admin-brand);
 
     &::after {
         left: 21px;

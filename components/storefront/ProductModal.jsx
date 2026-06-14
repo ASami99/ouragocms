@@ -9,7 +9,8 @@ export default function ProductModal({
     isOpen,
     onClose,
     onAddToCart,
-    color = '#E63946'
+    color = '#E63946',
+    isOrderingEnabled = true
 }) {
     const [selectedVariant, setSelectedVariant] = useState(null)
     const [selectedAddons, setSelectedAddons] = useState([])
@@ -200,10 +201,11 @@ export default function ProductModal({
                     onClick={handleAddToCart}
                     disabled={
                         (item.hasVariants && !selectedVariant) ||
-                        (selectedVariant?.isAvailable === false)
+                        (selectedVariant?.isAvailable === false) ||
+                        !isOrderingEnabled
                     }
                 >
-                    {added ? '✓ Added to Cart!' : 'Add to Cart'}
+                    {!isOrderingEnabled ? 'Ordering Closed' : added ? '✓ Added to Cart!' : 'Add to Cart'}
                 </button>
 
             </div>

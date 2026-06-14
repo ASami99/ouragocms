@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: localhost:3000/api/sitemap

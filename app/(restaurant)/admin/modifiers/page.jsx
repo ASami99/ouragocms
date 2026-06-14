@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@supabase/supabase-js'
+import styles from './modifiers.module.scss'
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -19,7 +20,6 @@ export default function ModifiersPage() {
     const [saving, setSaving] = useState(false)
     const [expandedGroup, setExpandedGroup] = useState(null)
 
-    // Load restaurant + modifier data
     useEffect(() => {
         const loadData = async () => {
             const { data: { user } } = await supabase.auth.getUser()
@@ -47,7 +47,6 @@ export default function ModifiersPage() {
         loadData()
     }, [router])
 
-    // Save group (create or update)
     const saveGroup = async (groupData) => {
         setSaving(true)
         const isNew = !groupData.id
@@ -73,7 +72,6 @@ export default function ModifiersPage() {
         setSaving(false)
     }
 
-    // Delete group
     const deleteGroup = async (groupId) => {
         if (!confirm('Delete this modifier group and all its options?')) return
         const res = await fetch(`/api/modifiers/groups/${groupId}`, { method: 'DELETE' })
@@ -82,7 +80,6 @@ export default function ModifiersPage() {
         }
     }
 
-    // Save modifier option inside a group
     const saveModifier = async (groupId, modifierData) => {
         const isNew = !modifierData.id
         const url = isNew ? '/api/modifiers/options' : `/api/modifiers/options/${modifierData.id}`
@@ -108,7 +105,6 @@ export default function ModifiersPage() {
         }
     }
 
-    // Delete modifier option
     const deleteModifier = async (groupId, modifierId) => {
         const res = await fetch(`/api/modifiers/options/${modifierId}`, { method: 'DELETE' })
         if (res.ok) {
@@ -120,55 +116,55 @@ export default function ModifiersPage() {
     }
 
     if (loading) {
-        return <div style={{ color: '#888', textAlign: 'center', padding: 60 }}>Loading modifiers...</div>
+        return <div className={styles.loading}>Loading modifiers...</div>
     }
 
     return (
-        <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#e0e0e0', fontFamily: 'system-ui' }}>
-            <header style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '20px 24px', borderBottom: '1px solid #1a1a1a' }}>
-                <button onClick={() => router.push('/admin/dashboard')} style={{ padding: '8px 16px', border: '1px solid #2a2a2a', borderRadius: 8, background: '#111', color: '#ccc', cursor: 'pointer' }}>
+        <div className={styles.page}>
+            <header className={styles.header}>
+                <button onClick={() => router.push('/admin/dashboard')} className={styles.backBtn}>
                     ← Dashboard
                 </button>
-                <h1 style={{ flex: 1, margin: 0, fontSize: '1.3rem' }}>Modifier Groups</h1>
+                <h1 className={styles.headerTitle}>Add-ons Groups</h1>
                 <button
                     onClick={() => { setEditingGroup({}); setShowGroupForm(true) }}
-                    style={{ padding: '8px 16px', border: '1px dashed #3a3a3a', borderRadius: 8, background: 'transparent', color: '#999', cursor: 'pointer' }}
+                    className={styles.addBtn}
                 >
-                    + Add Group
+                    + Add Add-ons Group
                 </button>
             </header>
 
-            <main style={{ padding: 24 }}>
+            <main className={styles.mainContent}>
                 {groups.length === 0 && (
-                    <p style={{ color: '#666', textAlign: 'center' }}>No modifier groups yet. Create your first one.</p>
+                    <p className={styles.emptyMessage}>No modifier groups yet. Create your first one.</p>
                 )}
 
                 {groups.map(group => (
-                    <section key={group.id} style={{ marginBottom: 24, background: '#111', borderRadius: 12, border: '1px solid #1a1a1a', overflow: 'hidden' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: '#0d0d0d' }}>
-                            <div>
-                                <h3 style={{ margin: 0, fontSize: '1.05rem', color: '#fff' }}>{group.name}</h3>
-                                <span style={{ fontSize: '0.8rem', color: '#888' }}>
+                    <section key={group.id} className={styles.groupSection}>
+                        <div className={styles.groupHeader}>
+                            <div className={styles.groupInfo}>
+                                <h3 className={styles.groupName}>{group.name}</h3>
+                                <span className={styles.groupMeta}>
                                     {group.selection_type === 'single' ? 'Single choice' : 'Multiple choice'}
                                     {group.is_required ? ' • Required' : ''}
                                 </span>
                             </div>
-                            <div style={{ display: 'flex', gap: 8 }}>
+                            <div className={styles.groupActions}>
                                 <button
                                     onClick={() => setExpandedGroup(expandedGroup === group.id ? null : group.id)}
-                                    style={{ padding: '6px 12px', border: '1px solid #2a2a2a', borderRadius: 6, background: '#111', color: '#ccc', cursor: 'pointer', fontSize: '0.85rem' }}
+                                    className={styles.actionBtn}
                                 >
                                     {expandedGroup === group.id ? 'Collapse' : 'Manage Options'}
                                 </button>
                                 <button
                                     onClick={() => { setEditingGroup(group); setShowGroupForm(true) }}
-                                    style={{ padding: '6px 10px', border: 'none', borderRadius: 6, background: 'transparent', color: '#ccc', cursor: 'pointer' }}
+                                    className={styles.iconBtn}
                                 >
                                     ✏️
                                 </button>
                                 <button
                                     onClick={() => deleteGroup(group.id)}
-                                    style={{ padding: '6px 10px', border: 'none', borderRadius: 6, background: 'transparent', color: '#E63946', cursor: 'pointer' }}
+                                    className={styles.deleteBtn}
                                 >
                                     🗑️
                                 </button>
@@ -176,21 +172,21 @@ export default function ModifiersPage() {
                         </div>
 
                         {expandedGroup === group.id && (
-                            <div style={{ padding: '16px 20px' }}>
+                            <div className={styles.expandedContent}>
                                 {(group.modifiers || []).length === 0 && (
-                                    <p style={{ color: '#666', fontSize: '0.85rem' }}>No options yet.</p>
+                                    <p className={styles.noOptions}>No options yet.</p>
                                 )}
 
                                 {(group.modifiers || []).map(mod => (
-                                    <div key={mod.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #1a1a1a' }}>
-                                        <div>
-                                            <span style={{ color: '#e0e0e0' }}>{mod.name}</span>
-                                            <span style={{ marginLeft: 8, color: mod.price > 0 ? '#4CAF50' : '#888', fontSize: '0.85rem' }}>
+                                    <div key={mod.id} className={styles.modifierRow}>
+                                        <div className={styles.modifierInfo}>
+                                            <span className={styles.modifierName}>{mod.name}</span>
+                                            <span className={`${styles.modifierPrice} ${mod.price > 0 ? styles.positive : styles.free}`}>
                                                 {mod.price > 0 ? `+QR ${Number(mod.price).toFixed(2)}` : 'Free'}
                                             </span>
-                                            {!mod.is_available && <span style={{ marginLeft: 8, color: '#E63946', fontSize: '0.8rem' }}>Unavailable</span>}
+                                            {!mod.is_available && <span className={styles.unavailableBadge}>Unavailable</span>}
                                         </div>
-                                        <div style={{ display: 'flex', gap: 8 }}>
+                                        <div className={styles.modifierActions}>
                                             <button
                                                 onClick={() => {
                                                     const newName = prompt('Modifier name:', mod.name)
@@ -201,7 +197,7 @@ export default function ModifiersPage() {
                                                         }
                                                     }
                                                 }}
-                                                style={{ background: 'none', border: 'none', color: '#ccc', cursor: 'pointer', fontSize: '0.9rem' }}
+                                                className={styles.iconBtn}
                                             >
                                                 ✏️
                                             </button>
@@ -209,7 +205,7 @@ export default function ModifiersPage() {
                                                 onClick={() => {
                                                     if (confirm('Delete this modifier?')) deleteModifier(group.id, mod.id)
                                                 }}
-                                                style={{ background: 'none', border: 'none', color: '#E63946', cursor: 'pointer', fontSize: '0.9rem' }}
+                                                className={styles.deleteBtn}
                                             >
                                                 🗑️
                                             </button>
@@ -227,7 +223,7 @@ export default function ModifiersPage() {
                                             }
                                         }
                                     }}
-                                    style={{ marginTop: 12, padding: '8px 16px', border: '1px dashed #3a3a3a', borderRadius: 8, background: 'transparent', color: '#999', cursor: 'pointer', fontSize: '0.85rem' }}
+                                    className={styles.addOptionBtn}
                                 >
                                     + Add Option
                                 </button>
@@ -239,8 +235,8 @@ export default function ModifiersPage() {
 
             {/* Group Form Modal */}
             {showGroupForm && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} onClick={() => { setShowGroupForm(false); setEditingGroup(null) }}>
-                    <form style={{ background: '#111', border: '1px solid #2a2a2a', borderRadius: 16, padding: 24, width: '90%', maxWidth: 450 }} onClick={e => e.stopPropagation()} onSubmit={e => {
+                <div className={styles.modalOverlay} onClick={() => { setShowGroupForm(false); setEditingGroup(null) }}>
+                    <form className={styles.modalForm} onClick={e => e.stopPropagation()} onSubmit={e => {
                         e.preventDefault()
                         const form = e.target
                         saveGroup({
@@ -251,28 +247,34 @@ export default function ModifiersPage() {
                             sort_order: parseInt(form.sort_order.value) || 0,
                         })
                     }}>
-                        <h2 style={{ margin: '0 0 20px', color: '#fff' }}>{editingGroup?.id ? 'Edit Group' : 'Add Group'}</h2>
+                        <h2 className={styles.modalTitle}>{editingGroup?.id ? 'Edit Group' : 'Add Group'}</h2>
 
-                        <label style={{ display: 'block', margin: '12px 0 4px', color: '#999', fontSize: '0.85rem' }}>Group Name</label>
-                        <input name="name" defaultValue={editingGroup?.name || ''} required style={{ width: '100%', padding: '10px 12px', border: '1px solid #2a2a2a', borderRadius: 8, background: '#0a0a0a', color: '#e0e0e0', fontSize: '0.95rem' }} />
+                        <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>Group Name</label>
+                            <input name="name" defaultValue={editingGroup?.name || ''} required className={styles.fieldInput} />
+                        </div>
 
-                        <label style={{ display: 'block', margin: '12px 0 4px', color: '#999', fontSize: '0.85rem' }}>Selection Type</label>
-                        <select name="selection_type" defaultValue={editingGroup?.selection_type || 'multiple'} style={{ width: '100%', padding: '10px 12px', border: '1px solid #2a2a2a', borderRadius: 8, background: '#0a0a0a', color: '#e0e0e0', fontSize: '0.95rem' }}>
-                            <option value="multiple">Multiple choice</option>
-                            <option value="single">Single choice</option>
-                        </select>
+                        <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>Selection Type</label>
+                            <select name="selection_type" defaultValue={editingGroup?.selection_type || 'multiple'} className={styles.fieldSelect}>
+                                <option value="multiple">Multiple choice</option>
+                                <option value="single">Single choice</option>
+                            </select>
+                        </div>
 
-                        <label style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '12px 0', color: '#ccc', fontSize: '0.9rem' }}>
+                        <label className={styles.checkboxLabel}>
                             <input type="checkbox" name="is_required" defaultChecked={editingGroup?.is_required || false} />
                             Required
                         </label>
 
-                        <label style={{ display: 'block', margin: '12px 0 4px', color: '#999', fontSize: '0.85rem' }}>Sort Order</label>
-                        <input name="sort_order" type="number" defaultValue={editingGroup?.sort_order || 0} style={{ width: '100%', padding: '10px 12px', border: '1px solid #2a2a2a', borderRadius: 8, background: '#0a0a0a', color: '#e0e0e0', fontSize: '0.95rem' }} />
+                        <div className={styles.fieldGroup}>
+                            <label className={styles.fieldLabel}>Sort Order</label>
+                            <input name="sort_order" type="number" defaultValue={editingGroup?.sort_order || 0} className={styles.fieldInput} />
+                        </div>
 
-                        <div style={{ display: 'flex', gap: 12, marginTop: 24, justifyContent: 'flex-end' }}>
-                            <button type="button" onClick={() => { setShowGroupForm(false); setEditingGroup(null) }} style={{ padding: '10px 20px', borderRadius: 8, border: 'none', background: '#1a1a1a', color: '#ccc', cursor: 'pointer' }}>Cancel</button>
-                            <button type="submit" disabled={saving} style={{ padding: '10px 20px', borderRadius: 8, border: 'none', background: '#E63946', color: '#fff', cursor: 'pointer' }}>
+                        <div className={styles.modalActions}>
+                            <button type="button" onClick={() => { setShowGroupForm(false); setEditingGroup(null) }} className={styles.cancelBtn}>Cancel</button>
+                            <button type="submit" disabled={saving} className={styles.saveBtn}>
                                 {saving ? 'Saving...' : 'Save'}
                             </button>
                         </div>

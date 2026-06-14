@@ -11,8 +11,10 @@ const supabase = createClient(
 
 const NAV_ITEMS = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: '📊' },
+    { label: 'Orders', path: '/admin/orders', icon: '🛎️' },
     { label: 'Menu', path: '/admin/menu', icon: '📋' },
-    { label: 'Modifiers', path: '/admin/modifiers', icon: '🧩' },
+    { label: 'Add-ons', path: '/admin/modifiers', icon: '🧩' },
+    { label: 'Settings', path: '/admin/settings', icon: '⚙️' },
 ]
 
 export default function Sidebar({ restaurantName }) {

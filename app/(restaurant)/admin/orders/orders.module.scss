@@ -1,0 +1,346 @@
+.page {
+    padding: 24px;
+    color: var(--admin-text-primary);
+    background: var(--admin-bg-page);
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    h1 {
+        font-size: 1.5rem;
+        color: var(--admin-text-inverse);
+        margin: 0;
+    }
+}
+
+.backBtn {
+    padding: 8px 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--admin-bg-input);
+    color: var(--admin-text-primary);
+    cursor: pointer;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.searchForm {
+    display: flex;
+    gap: 0;
+}
+
+.searchInput {
+    padding: 8px 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px 0 0 6px;
+    background: var(--admin-bg-input);
+    color: var(--admin-text-primary);
+    width: 260px;
+    font-size: 0.9rem;
+}
+
+.searchBtn {
+    padding: 8px 12px;
+    border: 1px solid var(--admin-border);
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    background: var(--admin-bg-hover);
+    color: var(--admin-text-primary);
+    cursor: pointer;
+}
+
+.statusSelect {
+    padding: 8px 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--admin-bg-input);
+    color: var(--admin-text-primary);
+    font-size: 0.9rem;
+}
+
+.dateRange {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dateInput {
+    padding: 8px 10px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--admin-bg-input);
+    color: var(--admin-text-primary);
+    font-size: 0.9rem;
+}
+.dateInput::-webkit-calendar-picker-indicator {
+    filter: brightness(0) saturate(100%) invert(90%) sepia(0%) saturate(0%) hue-rotate(154deg) brightness(94%) contrast(88%);
+}
+
+.dateSeparator {
+    color: var(--admin-text-muted);
+}
+
+.clearBtn {
+    padding: 8px 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--admin-bg-input);
+    color: var(--admin-text-primary);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.summary {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--admin-bg-input);
+    border-radius: 8px;
+    border: 1px solid var(--admin-border-light);
+    font-size: 0.9rem;
+    color: var(--admin-text-primary);
+
+    strong {
+        color: var(--admin-text-inverse);
+    }
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    th,
+    td {
+        padding: 12px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--admin-border-light);
+    }
+
+    th {
+        color: var(--admin-text-secondary);
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+}
+
+.orderRow {
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+        background: var(--admin-bg-hover);
+    }
+}
+
+.orderIdCell {
+    font-family: monospace;
+    font-weight: 600;
+}
+
+.totalCell {
+    font-weight: 600;
+    color: var(--admin-text-inverse);
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: var(--admin-text-inverse);
+    text-transform: capitalize;
+}
+
+.dateCell {
+    font-size: 0.85rem;
+    color: var(--admin-text-primary);
+}
+
+.timeText {
+    color: var(--admin-text-secondary);
+    font-size: 0.8rem;
+}
+
+.advanceBtn {
+    padding: 4px 10px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--admin-bg-surface);
+    color: var(--admin-text-primary);
+    cursor: pointer;
+    font-size: 0.85rem;
+
+    &:hover:not(:disabled) {
+        background: var(--admin-border);
+    }
+}
+
+.emptyRow {
+    text-align: center;
+    color: var(--admin-text-muted);
+    padding: 40px !important;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    align-items: center;
+
+    button {
+        padding: 8px 16px;
+        border: 1px solid var(--admin-border);
+        border-radius: 6px;
+        background: var(--admin-bg-surface);
+        color: var(--admin-text-primary);
+        cursor: pointer;
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    }
+}
+
+// Modal styles
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: var(--admin-bg-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h2 {
+        margin: 0;
+        color: var(--admin-text-inverse);
+    }
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    color: var(--admin-text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modalBody {
+    color: var(--admin-text-primary);
+}
+
+.customerInfo {
+    margin-bottom: 20px;
+
+    p {
+        margin: 4px 0;
+        font-size: 0.9rem;
+    }
+}
+
+.itemsList {
+    h3 {
+        margin: 0 0 12px;
+        font-size: 1rem;
+        color: var(--admin-text-inverse);
+    }
+}
+
+.modalItemRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.itemQty {
+    font-weight: 600;
+    color: var(--admin-brand);
+    min-width: 30px;
+}
+
+.itemDetail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.itemName {
+    font-weight: 500;
+}
+
+.itemVariant {
+    font-size: 0.8rem;
+    color: #F4A261;
+}
+
+.itemAddons {
+    font-size: 0.8rem;
+    color: var(--admin-text-secondary);
+    font-style: italic;
+}
+
+.itemNotes {
+    font-size: 0.8rem;
+    color: #ff6b6b;
+}
+
+.itemTotal {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.modalTotal {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top: 1px solid var(--admin-border);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.loading {
+    color: var(--admin-text-secondary);
+    text-align: center;
+    padding: 60px;
+}

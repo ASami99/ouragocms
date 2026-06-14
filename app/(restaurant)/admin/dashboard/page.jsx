@@ -60,7 +60,7 @@ export default function DashboardPage() {
     // }, [])
 
     const playNotification = useCallback(() => {
-        const audio = new Audio('/sounds/order-alert.wav')
+        const audio = new Audio('/sounds/order-alert-small.wav')
         audio.play().catch(() => {
         })
     }, [])
@@ -117,10 +117,14 @@ export default function DashboardPage() {
 
     const loadOrders = async (rpUser) => {
         // Use restaurants_id (uuid FK) if available, fall back to old restaurant_id
+        const sevenDaysAgo = new Date()
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+        
         const { data, error } = await supabase
             .from('orders')
             .select('*')
             .eq('restaurants_id', rpUser.restaurants_id)
+            .gte('created_at', sevenDaysAgo.toISOString())
             .order('created_at', { ascending: false })
 
         if (!error && data) {

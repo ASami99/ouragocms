@@ -4,17 +4,17 @@ import { useState } from 'react'
 import Image from 'next/image'
 import styles from './ProductCard.module.scss'
 
-export default function ProductCard({ item, onCardClick, color }) {
+export default function ProductCard({ item, onCardClick, color, isOrderingEnabled = true }) {
   const [imgError, setImgError] = useState(false)
 
   const handleClick = () => {
-    if (item.isAvailable) {
+    if (item.isAvailable  && isOrderingEnabled) {
       onCardClick(item)
     }
   }
 
   return (
-    <article 
+    <article
       className={`${styles.card} ${!item.isAvailable ? styles.disabled : ''}`}
       style={{ '--primary': color }}
       onClick={handleClick}
@@ -58,12 +58,11 @@ export default function ProductCard({ item, onCardClick, color }) {
             className={styles.addBtn}
             onClick={(e) => {
               e.stopPropagation()
-              handleClick()
+              if (item.isAvailable && isOrderingEnabled) handleClick()
             }}
-            disabled={!item.isAvailable}
-            aria-label={`View ${item.name}`}
+            disabled={!item.isAvailable || !isOrderingEnabled}
           >
-            Add to Cart
+            {!isOrderingEnabled ? 'Closed' : !item.isAvailable ? 'Sold Out' : 'Add'}
           </button>
         </div>
       </div>

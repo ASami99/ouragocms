@@ -53,6 +53,11 @@ export default function AdminLayout({ children }) {
         checkAuth()
     }, [pathname, router])
 
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('ourago-admin-theme') || 'dark'
+        document.documentElement.setAttribute('data-admin-theme', savedTheme)
+    }, [])
+
     if (checking) {
         return (
             <div style={{
@@ -74,7 +79,7 @@ export default function AdminLayout({ children }) {
     return (
         <div style={{ display: 'flex' }}>
             <Sidebar restaurantName={restaurantName} />
-            <main style={{ marginLeft: '200px', flex: 1, background: '#0a0a0a', minHeight: '100vh' }}>
+            <main style={{ marginLeft: '200px', flex: 1, background: 'var(--admin-bg-surface)', minHeight: '100vh' }}>
                 {children}
             </main>
         </div>
