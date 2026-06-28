@@ -17,6 +17,8 @@ export async function PATCH(request, { params }) {
             social_links: body.social_links,
             is_accepting_orders: body.is_accepting_orders,
             opening_hours: body.opening_hours,
+            meta_title: body.meta_title,
+            meta_description: body.meta_description,
         })
         .eq('id', id)
         .select()

@@ -108,3 +108,24 @@
   height: 3px;
   width: 100%;
 }
+
+
+
+.socialRow {
+  background: rgba(0,0,0,0.03);
+  border-top: 1px solid var(--border, #eee);
+
+
+}
+.container {
+    display: flex;
+    justify-content: flex-end;
+    max-width: 1280px;
+  }
+
+.socialLink {
+  font-size: 1.3rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  &:hover { opacity: 0.7; }
+}

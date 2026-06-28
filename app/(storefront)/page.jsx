@@ -205,6 +205,7 @@ export default async function StorefrontPage({ searchParams }) {
         phone={restaurant.phone}
         address={restaurant.address}
         color={restaurant.primary_color}
+        socialLinks={restaurant.social_links}
       />
 
 

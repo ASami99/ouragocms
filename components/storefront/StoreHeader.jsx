@@ -1,7 +1,11 @@
 import Image from 'next/image'
 import styles from './StoreHeader.module.scss'
 
-export default function StoreHeader({ name, logoUrl, phone, address, color }) {
+export default function StoreHeader({ name, logoUrl, phone, address, color, socialLinks }) {
+    const platforms = socialLinks
+        ? Object.entries(socialLinks).filter(([_, url]) => url)
+        : []
+
     return (
         <header className={styles.header}>
             {/* Top bar with restaurant brand */}
@@ -46,11 +50,38 @@ export default function StoreHeader({ name, logoUrl, phone, address, color }) {
                 </div>
             </div>
 
+
+            {platforms.length > 0 && (
+                <div className={styles.socialRow}>
+                    <div className={styles.container}>
+                        {platforms.map(([platform, url]) => (
+                            <a
+                                key={platform}
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.socialLink}
+                                aria-label={platform}
+                            >
+                                {platform === 'instagram' && '📷'}
+                                {platform === 'facebook' && '📘'}
+                                {platform === 'tiktok' && '🎵'}
+                                {platform === 'website' && '🌐'}
+                            </a>
+                        ))}
+                    </div>
+
+                </div>
+            )}
+
             {/* Accent bar using restaurant primary color */}
             <div
                 className={styles.accentBar}
                 style={{ background: color || '#E63946' }}
             />
+
+
+
         </header>
     )
 }

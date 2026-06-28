@@ -69,6 +69,12 @@ export default function SettingsPage() {
     })
     const [pausedUntil, setPausedUntil] = useState(null)
 
+    // seo meta fields
+    const [metaTitle, setMetaTitle] = useState('')
+    const [metaDescription, setMetaDescription] = useState('')
+
+
+
     // Load restaurant data
     useEffect(() => {
         const loadData = async () => {
@@ -96,6 +102,8 @@ export default function SettingsPage() {
                 setEmail(resData.email || '')
                 setAddress(resData.address || '')
                 setLogoUrl(resData.logo_url || '')
+                setMetaTitle(resData.meta_title || '')
+                setMetaDescription(resData.meta_description || '')
                 if (resData.social_links) {
                     setSocialLinks(prev => ({ ...prev, ...resData.social_links }))
                 }
@@ -111,6 +119,7 @@ export default function SettingsPage() {
                 if (resData.opening_hours) {
                     setOpeningHours(prev => ({ ...prev, ...resData.opening_hours }))
                 }
+
             }
 
             const savedTheme = localStorage.getItem('ourago-admin-theme') || 'dark'
@@ -164,9 +173,9 @@ export default function SettingsPage() {
     }
 
     const handleThemeChange = (newTheme) => {
-      setAdminTheme(newTheme)
-      localStorage.setItem('ourago-admin-theme', newTheme)
-      document.documentElement.setAttribute('data-admin-theme', newTheme)
+        setAdminTheme(newTheme)
+        localStorage.setItem('ourago-admin-theme', newTheme)
+        document.documentElement.setAttribute('data-admin-theme', newTheme)
     }
 
     const handleSubmit = async (e) => {
@@ -187,6 +196,8 @@ export default function SettingsPage() {
                 is_accepting_orders: isAcceptingOrders,
                 opening_hours: openingHours,
                 orders_paused_until: pausedUntil ? new Date(pausedUntil).toISOString() : null,
+                meta_title: metaTitle,
+                meta_description: metaDescription,
             }),
         })
 
@@ -284,6 +295,25 @@ export default function SettingsPage() {
                         required
                     />
                 </Field>
+                
+                <Field label="Meta Title (SEO)">
+                    <input
+                        className={styles.input}
+                        value={metaTitle}
+                        onChange={e => setMetaTitle(e.target.value)}
+                        placeholder="Custom page title for search engines"
+                    />
+                </Field>
+
+                <Field label="Meta Description (SEO)">
+                    <textarea
+                        className={styles.textarea}
+                        value={metaDescription}
+                        onChange={e => setMetaDescription(e.target.value)}
+                        rows={2}
+                        placeholder="Brief description for search results"
+                    />
+                </Field>
 
                 <Field label="Phone">
                     <input
@@ -370,14 +400,14 @@ export default function SettingsPage() {
                 ))}
 
                 <Field label="Admin Theme">
-                  <select
-                    className={styles.select}
-                    value={adminTheme}
-                    onChange={e => handleThemeChange(e.target.value)}
-                  >
-                    <option value="dark">Dark</option>
-                    <option value="light">Light</option>
-                  </select>
+                    <select
+                        className={styles.select}
+                        value={adminTheme}
+                        onChange={e => handleThemeChange(e.target.value)}
+                    >
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                    </select>
                 </Field>
 
                 <h2 className={styles.sectionTitle}>Social Media Links</h2>

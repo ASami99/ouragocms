@@ -50,14 +50,22 @@ export async function proxy(request) {
         response.headers.set('x-restaurant-id', '')
         response.headers.set('x-restaurant-name', '')
         response.headers.set('x-restaurant-color', '#E63946')
+        // SEO defaults
+        response.headers.set('x-restaurant-meta-title', '')
+        response.headers.set('x-restaurant-meta-description', '')
         return response
     }
+
+
+    console.log('Proxy debug — slug:', slug, 'domain:', domain)
+
 
     // 4. Fetch restaurant from Supabase
     let query = supabase
         .from('restaurants')
-        .select('id, name, slug, primary_color, phone, whatsapp, email, address, logo_url, is_active')
+        .select('id, name, slug, primary_color, phone, meta_title, meta_description, email, address, logo_url, is_active')
         .eq('is_active', true)
+
 
     if (slug) {
         query = query.eq('slug', slug)
@@ -67,6 +75,12 @@ export async function proxy(request) {
     }
 
     const { data: restaurant, error } = await query.maybeSingle()
+
+
+
+    console.log('Proxy debug — restaurant found:', restaurant, 'error:', error)
+
+
 
     if (error || !restaurant) {
         // No restaurant found → pass through (you could show a 404 later)
@@ -88,6 +102,9 @@ export async function proxy(request) {
     response.headers.set('x-restaurant-email', restaurant.email || '')
     response.headers.set('x-restaurant-addr', restaurant.address || '')
     response.headers.set('x-restaurant-logo', restaurant.logo_url || '')
+    // SEO headers
+    response.headers.set('x-restaurant-meta-title', restaurant.meta_title || '')
+    response.headers.set('x-restaurant-meta-description', restaurant.meta_description || '')
 
     return response
 }

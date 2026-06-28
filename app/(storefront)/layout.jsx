@@ -5,14 +5,16 @@ export async function generateMetadata() {
   const name = headersList.get('x-restaurant-name') || 'Restaurant'
   const color = headersList.get('x-restaurant-color') || '#E63946'
   const addr = headersList.get('x-restaurant-addr') || 'Doha, Qatar'
+  const metaTitle = headersList.get('x-restaurant-meta-title') || ''
+  const metaDescription = headersList.get('x-restaurant-meta-description') || ''
 
   return {
-    title: `${name} — Order Online | OuraGo`,
-    description: `Order directly from ${name}, ${addr}. Fast delivery in Doha, Qatar. Pay cash on delivery.`,
+    title: `${metaTitle || name} — Order Online | OuraGo`,
+    description: metaDescription || `Order directly from ${name}, ${addr}. Fast delivery in Doha, Qatar. Pay cash on delivery.`,
     themeColor: color,
     openGraph: {
-      title: `${name} — Order Online`,
-      description: `Order directly from ${name} in Doha, Qatar.`,
+      title: `${metaTitle || name} — Order Online`,
+      description: metaDescription || `Order directly from ${name} in Doha, Qatar.`,
       locale: 'en_QA',
       type: 'website',
     },
