@@ -8,16 +8,26 @@ export async function generateMetadata() {
   const metaTitle = headersList.get('x-restaurant-meta-title') || ''
   const metaDescription = headersList.get('x-restaurant-meta-description') || ''
 
+  const title = metaTitle || `${name} — Order Online | OuraGo`
+  const description = metaDescription || `Order directly from ${name}, ${addr}. Fast delivery in Doha, Qatar. Pay cash on delivery.`
+
   return {
-    title: `${metaTitle || name} — Order Online | OuraGo`,
-    description: metaDescription || `Order directly from ${name}, ${addr}. Fast delivery in Doha, Qatar. Pay cash on delivery.`,
-    themeColor: color,
+    title,
+    description,
     openGraph: {
-      title: `${metaTitle || name} — Order Online`,
-      description: metaDescription || `Order directly from ${name} in Doha, Qatar.`,
+      title,
+      description,
       locale: 'en_QA',
       type: 'website',
     },
+  }
+}
+
+export async function generateViewport() {
+  const headersList = await headers()
+  const color = headersList.get('x-restaurant-color') || '#E63946'
+  return {
+    themeColor: color,
   }
 }
 
