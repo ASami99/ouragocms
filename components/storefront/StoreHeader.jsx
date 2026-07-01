@@ -19,6 +19,7 @@ export default function StoreHeader({ name, logoUrl, phone, address, color, soci
                                 width={56}
                                 height={56}
                                 className={styles.logo}
+                                loading="eager"
                             />
                         </div>
                     ) : (
